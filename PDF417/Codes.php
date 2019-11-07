@@ -1,6 +1,6 @@
 <?php
 
-namespace BigFish\PDF417;
+namespace PDF417;
 
 /**
  * Converts high-level (base 929) code words into low-level code words (binary
@@ -277,7 +277,7 @@ class Codes
             0x1bf4e, 0x17e8c, 0x17e86, 0x13e5c, 0x17edc, 0x13e4e, 0x17ece,
             0x17e58, 0x1bf2e, 0x17e4c, 0x17e46, 0x13e2e, 0x17e6e, 0x17e2c,
             0x17e26, 0x10f5e, 0x11f5c, 0x11f4e, 0x13f58, 0x19fae, 0x13f4c,
-            0x13f46, 0x11f2e, 0x13f6e, 0x13f2c, 0x13f26,
+            0x13f46, 0x11f2e, 0x13f6e, 0x13f2c, 0x13f26
         ],
         [
             0x1abe0, 0x1d5f8, 0x153c0, 0x1a9f0, 0x1d4fc, 0x151e0, 0x1a8f8,
@@ -412,22 +412,18 @@ class Codes
             0x11f34, 0x10f12, 0x13f74, 0x11f32, 0x13f72, 0x1cfca, 0x18f8a,
             0x19f9a, 0x10f0a, 0x11f1a, 0x13f3a, 0x103ac, 0x103a6, 0x107a8,
             0x183d6, 0x107a4, 0x107a2, 0x10396, 0x107b6, 0x187d4, 0x187d2,
-            0x10794, 0x10fb4, 0x10792, 0x10fb2, 0x1c7ea,
+            0x10794, 0x10fb4, 0x10792, 0x10fb2, 0x1c7ea
         ]
     ];
 
     /**
      * Returns a low-level code work corresponding to the given high-level code
      * word in the given table.
-     *
-     * @param  integer $table The table to look in (0-2).
-     * @param  integer $word  The code word to encode (0-928).
-     * @return integer        The encoded code word.
      */
-    public static function getCode($table, $word)
+    public static function getCode(int $table, int $word)
     {
         if (!isset(self::$codes[$table][$word])) {
-            throw new \Exception("Invalid code word [$table][$word].");
+           throw pException::InternalError("Invalid code word [$table][$word].");
         }
 
         return self::$codes[$table][$word];
