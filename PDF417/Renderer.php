@@ -68,15 +68,16 @@ class Renderer
 	private function createImage()
 	{
 		$padding = $this->options['padding'];
-		$ratio = $this->options['ratio'];
-		$scale = $this->options['scale'];
 
-		$height = count($this->pixelGrid);
 		$width = count($this->pixelGrid[0]);
+		$height = count($this->pixelGrid);
+
+		$scaleX = $this->options['scale'];
+		$scaleY = $this->options['scale'] * $this->options['ratio'];
 
 		// Apply scaling & aspect ratio
-		$width = ($width * $scale) + $padding * 2;
-		$height = ($height * ($scale * $ratio)) + $padding * 2;
+		$width = ($width * $scaleX) + $padding * 2;
+		$height = ($height * $scaleY) + $padding * 2;
 
 		$this->image = imagecreate($width, $height);
 
@@ -87,19 +88,16 @@ class Renderer
 		list($R,$G,$B) = $this->options['color']->get();
 		$colorAlloc = imagecolorallocate($this->image,$R,$G,$B);
 
-		$fx = $scale;
-		$fy = ($scale * $ratio);
-
 		// Render the barcode
 		foreach ($this->pixelGrid as $y => $row) {
 			foreach ($row as $x => $value) {
 				if ($value) {
 					imagefilledrectangle(
 						$this->image,
-						($x * $fx) + $padding,
-						($y * $fy) + $padding,
-						(($x + 1) * $fx - 1) + $padding,
-						(($y + 1) * $fy - 1) + $padding,
+						($x * $scaleX) + $padding,
+						($y * $scaleY) + $padding,
+						(($x + 1) * $scaleX - 1) + $padding,
+						(($y + 1) * $scaleY - 1) + $padding,
 						$colorAlloc
 					);
 				}
