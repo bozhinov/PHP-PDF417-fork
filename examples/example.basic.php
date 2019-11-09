@@ -18,7 +18,7 @@ $pdf417->encode($text);
 $pdf417->toFile('temp/example.basic.png');
 
 // Create an SVG representation
-$pdf417->configure(['color' => new pColor(0)]);
+$pdf417->config(['color' => new pColor(0)]);
 $pdf417->toFile("temp/example.basic.svg");
 
 ?>

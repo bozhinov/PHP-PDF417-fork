@@ -74,37 +74,37 @@ class Renderer
 		$height = count($this->pixelGrid);
 		$width = count($this->pixelGrid[0]);
 
-		$wPadding = $padding / $scale;
-		$hPadding = $padding / ($scale * $ratio);
+		// Apply scaling & aspect ratio
+		$width = ($width * $scale) + $padding * 2;
+		$height = ($height * ($scale * $ratio)) + $padding * 2;
 
-		$width  += $wPadding * 2;
-		$height += $hPadding * 2;
-
-		$base_image = imagecreate($width, $height);
+		$this->image = imagecreate($width, $height);
 
 		// Extract options
 		list($R,$G,$B) = $this->options['bgColor']->get();
-		$bgColorAlloc = imagecolorallocate($base_image,$R,$G,$B);
-		imagefill($base_image, 0, 0, $bgColorAlloc);
+		$bgColorAlloc = imagecolorallocate($this->image,$R,$G,$B);
+		imagefill($this->image, 0, 0, $bgColorAlloc);
 		list($R,$G,$B) = $this->options['color']->get();
-		$colorAlloc = imagecolorallocate($base_image,$R,$G,$B);
+		$colorAlloc = imagecolorallocate($this->image,$R,$G,$B);
+
+		$fx = $scale;
+		$fy = ($scale * $ratio);
 
 		// Render the barcode
 		foreach ($this->pixelGrid as $y => $row) {
 			foreach ($row as $x => $value) {
 				if ($value) {
-					imagesetpixel($base_image, $x + $wPadding, $y + $hPadding, $colorAlloc);
+					imagefilledrectangle(
+						$this->image,
+						($x * $fx) + $padding,
+						($y * $fy) + $padding,
+						(($x + 1) * $fx - 1) + $padding,
+						(($y + 1) * $fy - 1) + $padding,
+						$colorAlloc
+					);
 				}
 			}
 		}
-
-		// Apply scaling & aspect ratio
-		$width2 = $width * $scale;
-		$height2 = $height * ($scale * $ratio);
-
-		$this->image = imagecreate($width2, $height2);
-		imagecopyresized($this->image, $base_image, 0, 0, 0, 0, $width2, $height2, $width, $height);
-		imagedestroy($base_image);
 	}
 
 	public function createSVG()
