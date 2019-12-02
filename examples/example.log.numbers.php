@@ -14,6 +14,3 @@ $pdf417->encode($text);
 
 // Create a PNG image
 $pdf417->toFile('temp/example.numbers.long.png');
-
-
-?>

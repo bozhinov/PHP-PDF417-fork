@@ -19,5 +19,3 @@ class pException extends \Exception
 		return new static(sprintf('PDF417: %s', $text));
 	}
 }
-
-?>

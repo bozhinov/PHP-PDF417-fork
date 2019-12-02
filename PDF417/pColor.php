@@ -48,5 +48,3 @@ class pColor
 		return  "#".(strlen($R) < 2 ? '0' : '').$R.(strlen($G) < 2 ? '0' : '').$G.(strlen($B) < 2 ? '0' : '').$B;
 	}
 }
-
-?>
