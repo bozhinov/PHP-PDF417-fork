@@ -8,9 +8,10 @@ use PDF417\pException;
 
 class PDF417
 {
-    private $_START_CHARACTER = 0x1fea8;
-    private $_STOP_CHARACTER  = 0x3fa29;
-    private $options = [];
+	private $_START_CHARACTER = 0x1fea8;
+	private $_STOP_CHARACTER  = 0x3fa29;
+	private $options = [];
+	private $pixelGrid;
 
 	public function __construct(array $options = [])
     {
