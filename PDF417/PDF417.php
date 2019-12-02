@@ -72,29 +72,34 @@ class PDF417
 		}
     }
 
+	private function render()
+	{
+		return (new Renderer($this->pixelGrid, $this->options));
+	}
+
 	public function toFile(string $filename, bool $forWeb = false)
 	{
 		$ext = strtoupper(substr($filename, -3));
 		($forWeb) AND $filename = null;
 
-		$Renderer = new Renderer($this->pixelGrid, $this->options);
+		$renderer = $this->render();
 
 		switch($ext)
 		{
 			case "PNG":
-				$Renderer->toPNG($filename);
+				$renderer->toPNG($filename);
 				break;
 			case "GIF":
-				$Renderer->toGIF($filename);
+				$renderer->toGIF($filename);
 				break;
 			case "JPG":
-				$Renderer->toJPG($filename, $this->options['quality']);
+				$renderer->toJPG($filename, $this->options['quality']);
 				break;
 			case "SVG":
-				$content = $Renderer->createSVG();
+				$content = $renderer->createSVG();
 				if(is_null($filename)) {
 					header("Content-type: image/svg+xml");
-					echo $content;
+					return $content;
 				} else {
 					file_put_contents($filename, $content);
 				}
@@ -107,7 +112,7 @@ class PDF417
 	public function forWeb(string $ext)
 	{
 		if (strtoupper($ext) == "BASE64"){
-			echo (new Renderer($this->pixelGrid, $this->options))->toBase64();
+			return ($this->render())->toBase64();
 		} else {
 			$this->toFile($ext, true);
 		}
@@ -115,8 +120,7 @@ class PDF417
 
 	public function forPChart(\pChart\pDraw $MyPicture, $X = 0, $Y = 0)
 	{
-		$Renderer = new Renderer($this->pixelGrid, $this->options);
-		$Renderer->forPChart($MyPicture->gettheImage(), $X, $Y);
+		($this->render())->forPChart($MyPicture->gettheImage(), $X, $Y);
 	}
 
     /**
