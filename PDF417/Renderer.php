@@ -126,13 +126,6 @@ class Renderer
         $svg->setAttribute("version", "1.1");
         $svg->setAttribute("xmlns", "http://www.w3.org/2000/svg");
 
-        // Add description node if defined
-        if (!empty($this->options['description'])) {
-            $svg->appendChild(
-                $doc->createElement("description",$this->options['description'])
-            );
-        }
-
         // Create the group
         $group = $doc->createElement("g");
         $group->setAttribute('id', 'barcode');
