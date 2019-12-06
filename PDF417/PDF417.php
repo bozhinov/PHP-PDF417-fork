@@ -10,7 +10,7 @@ class PDF417
 	private $pixelGrid;
 
 	public function __construct(array $options = [])
-    {
+	{
 		$this->options['color'] = (isset($options['color'])) ? $options['color'] : new pColor(0);
 		$this->options['bgColor'] = (isset($options['bgColor'])) ? $options['bgColor'] : new pColor(255);
 		/**
@@ -33,7 +33,7 @@ class PDF417
 		$this->options['quality'] = (isset($options['quality'])) ? $options['quality'] : 90;
 
 		$this->validateOptions();
-    }
+	}
 
 	public function config(array $options)
 	{
@@ -42,13 +42,13 @@ class PDF417
 
 	private function option_in_range(string $name, int $start, int $end)
 	{
-        if (!is_numeric($this->options[$name]) || $this->options[$name] < $start || $this->options[$name] > $end) {
+		if (!is_numeric($this->options[$name]) || $this->options[$name] < $start || $this->options[$name] > $end) {
 			throw pException::InvalidInput("Invalid value for \"$name\". Expected an integer between $start and $end.");
-        }
+		}
 	}
 
-    private function validateOptions()
-    {
+	private function validateOptions()
+	{
 		$this->option_in_range('scale', 1, 20);
 		$this->option_in_range('ratio', 1, 10);
 		$this->option_in_range('padding', 0, 50);
@@ -58,7 +58,7 @@ class PDF417
 
 		if (!in_array($this->options["hint"], ["binary", "numbers", "text", "none"])){
 			throw pException::InvalidInput("Invalid value for \"hint\". Expected \"binary\", \"numbers\" or \"text\".");
-        }
+		}
 
 		if (!($this->options['color'] instanceof pColor)) {
 			throw pException::InvalidInput("Invalid value for \"color\". Expected a pColor object.");
@@ -67,7 +67,7 @@ class PDF417
 		if (!($this->options['bgColor'] instanceof pColor)) {
 			throw pException::InvalidInput("Invalid value for \"bgColor\". Expected a pColor object.");
 		}
-    }
+	}
 
 	private function render()
 	{
@@ -120,137 +120,137 @@ class PDF417
 		($this->render())->forPChart($MyPicture->gettheImage(), $X, $Y);
 	}
 
-    /**
-     * Encodes the given data to low level code words.
-     */
-    public function encode($data)
-    {
-        $codeWords = $this->encodeData($data);
+	/**
+	* Encodes the given data to low level code words.
+	*/
+	public function encode($data)
+	{
+		$codeWords = $this->encodeData($data);
 
-        // Arrange codewords into a rows and columns
-        $grid = array_chunk($codeWords, $this->options['columns']);
-        $rows = count($grid);
+		// Arrange codewords into a rows and columns
+		$grid = array_chunk($codeWords, $this->options['columns']);
+		$rows = count($grid);
 
-        // Iterate over rows
-        $this->pixelGrid = [];
-        foreach ($grid as $rowNum => $row) {
+		// Iterate over rows
+		$this->pixelGrid = [];
+		foreach ($grid as $rowNum => $row) {
 
-            $table = $rowNum % 3;
+			$table = $rowNum % 3;
 
 			// Add starting code word
-            $rowCodes = [$this->_START_CHARACTER];
+			$rowCodes = [$this->_START_CHARACTER];
 
-            // Add left-side code word
-            $left = $this->getLeftCodeWord($rowNum, $rows);
-            $rowCodes[] = Codes::getCode($table, $left);
+			// Add left-side code word
+			$left = $this->getLeftCodeWord($rowNum, $rows);
+			$rowCodes[] = Codes::getCode($table, $left);
 
-            // Add data code words
-            foreach ($row as $word) {
-                $rowCodes[] = Codes::getCode($table, $word);
-            }
+			// Add data code words
+			foreach ($row as $word) {
+				$rowCodes[] = Codes::getCode($table, $word);
+			}
 
-            // Add right-side code word
-            $right = $this->getRightCodeWord($rowNum, $rows);
-            $rowCodes[] = Codes::getCode($table, $right);
+			// Add right-side code word
+			$right = $this->getRightCodeWord($rowNum, $rows);
+			$rowCodes[] = Codes::getCode($table, $right);
 
-            // Add ending code word
-            $rowCodes[] = $this->_STOP_CHARACTER;
+			// Add ending code word
+			$rowCodes[] = $this->_STOP_CHARACTER;
 
 			$pixelRow = [];
 			foreach ($rowCodes as $value) {
-                $bin = decbin($value);
-                $len = strlen($bin);
-                for ($i = 0; $i < $len; $i++) {
-                    $pixelRow[] = (boolean) $bin[$i];
-                }
-            }
+				$bin = decbin($value);
+				$len = strlen($bin);
+				for ($i = 0; $i < $len; $i++) {
+					$pixelRow[] = (boolean) $bin[$i];
+				}
+			}
 
-			 $this->pixelGrid[] = $pixelRow;
-        }
-    }
+			$this->pixelGrid[] = $pixelRow;
+		}
+	}
 
-    /* Encodes data to a grid of codewords for constructing the barcode. */
-    public function encodeData($data)
-    {
-        // Encode data to code words
-        $dataWords = (new DataEncoder($this->options))->encode($data);
+	/* Encodes data to a grid of codewords for constructing the barcode. */
+	public function encodeData($data)
+	{
+		// Encode data to code words
+		$dataWords = (new DataEncoder($this->options))->encode($data);
 
-        // Number of code correction words
-        $ecCount = pow(2, $this->options['securityLevel'] + 1);
-        $dataCount = count($dataWords);
+		// Number of code correction words
+		$ecCount = pow(2, $this->options['securityLevel'] + 1);
+		$dataCount = count($dataWords);
 
-        // Add padding if needed
-        $padWords = $this->getPadding($dataCount, $ecCount);
-        $dataWords = array_merge($dataWords, $padWords);
+		// Add padding if needed
+		$padWords = $this->getPadding($dataCount, $ecCount);
+		$dataWords = array_merge($dataWords, $padWords);
 
-        // Add length specifier as the first data code word
-        // Length includes the data CWs, padding CWs and the specifier itself
-        $length = count($dataWords) + 1;
-        array_unshift($dataWords, $length);
+		// Add length specifier as the first data code word
+		// Length includes the data CWs, padding CWs and the specifier itself
+		$length = count($dataWords) + 1;
+		array_unshift($dataWords, $length);
 
-        // Compute error correction code words
-        $reedSolomon = new ReedSolomon();
-        $ecWords = $reedSolomon->compute($dataWords, $this->options['securityLevel']);
+		// Compute error correction code words
+		$reedSolomon = new ReedSolomon();
+		$ecWords = $reedSolomon->compute($dataWords, $this->options['securityLevel']);
 
-        // Combine the code words and return
-        return array_merge($dataWords, $ecWords);
-    }
+		// Combine the code words and return
+		return array_merge($dataWords, $ecWords);
+	}
 
-    private function getLeftCodeWord($rowNum, $rows)
-    {
-        // Table used to encode this row
-        $tableID = $rowNum % 3;
+	private function getLeftCodeWord($rowNum, $rows)
+	{
+		// Table used to encode this row
+		$tableID = $rowNum % 3;
 
-        switch($tableID) {
-            case 0:
-                $x = intval(($rows - 1) / 3);
-                break;
-            case 1:
-                $x = $this->options['securityLevel'] * 3;
-                $x += ($rows - 1) % 3;
-                break;
-            case 2:
-                $x = $this->options['columns'] - 1;
-                break;
-        }
+		switch($tableID) {
+			case 0:
+				$x = intval(($rows - 1) / 3);
+				break;
+			case 1:
+				$x = $this->options['securityLevel'] * 3;
+				$x += ($rows - 1) % 3;
+				break;
+			case 2:
+				$x = $this->options['columns'] - 1;
+				break;
+		}
 
-        return 30 * intval($rowNum / 3) + $x;
-    }
+		return 30 * intval($rowNum / 3) + $x;
+	}
 
-    private function getRightCodeWord($rowNum, $rows)
-    {
-        $tableID = $rowNum % 3;
+	private function getRightCodeWord($rowNum, $rows)
+	{
+		$tableID = $rowNum % 3;
 
-        switch($tableID) {
-            case 0:
-                $x = $this->options['columns'] - 1;
-                break;
-            case 1:
-                $x = intval(($rows - 1) / 3);
-                break;
-            case 2:
-                $x = $this->options['securityLevel'] * 3;
-                $x += ($rows - 1) % 3;
-                break;
-        }
+		switch($tableID) {
+			case 0:
+				$x = $this->options['columns'] - 1;
+				break;
+			case 1:
+				$x = intval(($rows - 1) / 3);
+				break;
+			case 2:
+				$x = $this->options['securityLevel'] * 3;
+				$x += ($rows - 1) % 3;
+				break;
+		}
 
-        return 30 * intval($rowNum / 3) + $x;
-    }
+		return 30 * intval($rowNum / 3) + $x;
+	}
 
-    private function getPadding($dataCount, $ecCount)
-    {
-        // Total number of data words and error correction words, additionally
-        // reserve 1 code word for the length descriptor
-        $totalCount = $dataCount + $ecCount + 1;
-        $mod = $totalCount % $this->options['columns'];
+	private function getPadding($dataCount, $ecCount)
+	{
+		// Total number of data words and error correction words, additionally
+		// reserve 1 code word for the length descriptor
+		$totalCount = $dataCount + $ecCount + 1;
+		$mod = $totalCount % $this->options['columns'];
 
-        if ($mod > 0) {
-            $padCount = $this->options['columns'] - $mod;
-            $padding = array_fill(0, $padCount, 900);
-        } else {
-            $padding = [];
-        }
+		if ($mod > 0) {
+			$padCount = $this->options['columns'] - $mod;
+			$padding = array_fill(0, $padCount, 900);
+		} else {
+			$padding = [];
+		}
 
-        return $padding;
-    }
+		return $padding;
+	}
 }
