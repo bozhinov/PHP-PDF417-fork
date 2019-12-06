@@ -2,10 +2,6 @@
 
 namespace PDF417;
 
-use PDF417\Renderer;
-use PDF417\pColor;
-use PDF417\pException;
-
 class PDF417
 {
 	private $_START_CHARACTER = 0x1fea8;
@@ -98,7 +94,7 @@ class PDF417
 				break;
 			case "SVG":
 				$content = $renderer->createSVG();
-				if(is_null($filename)) {
+				if($forWeb) {
 					header("Content-type: image/svg+xml");
 					return $content;
 				} else {
