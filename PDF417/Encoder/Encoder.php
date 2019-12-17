@@ -3,10 +3,10 @@
 namespace PDF417\Encoder;
 
 /**
- * Encodes data into PDF417 code words.
- *
- * Top level data encoder which assigns encoding to lower level (byte, number, text) encoders.
- */
+* Encodes data into PDF417 code words.
+*
+* Top level data encoder which assigns encoding to lower level (byte, number, text) encoders.
+*/
 class Encoder
 {
 	private $encoders;
@@ -14,17 +14,17 @@ class Encoder
 	private $_START_CHARACTER = 0x1fea8;
 	private $_STOP_CHARACTER  = 0x3fa29;
 
-    public function __construct(array $options)
-    {
-        // Encoders sorted in order of preference
-        $this->encoders = [
-            new EncoderNumber(),
-            new EncoderText(),
-            new EncoderByte()
-        ];
+	public function __construct(array $options)
+	{
+		// Encoders sorted in order of preference
+		$this->encoders = [
+			new EncoderNumber(),
+			new EncoderText(),
+			new EncoderByte()
+		];
 
-        $this->options = $options;
-    }
+		$this->options = $options;
+	}
 
 	/**
 	* Encodes the given data to low level code words.
@@ -73,7 +73,7 @@ class Encoder
 
 			$pixelGrid[] = $pixelRow;
 		}
-		
+
 		return $pixelGrid;
 	}
 
@@ -162,11 +162,11 @@ class Encoder
 		return $padding;
 	}
 
-    /**
-     * Splits the input data into chains. Then encodes each chain.
-     */
-    private function encode($data)
-    {
+	/**
+	* Splits the input data into chains. Then encodes each chain.
+	*/
+	private function encode($data)
+	{
 		switch($this->options["hint"]){
 			case "numbers":
 				$chains = [[$data, 0]];
@@ -181,27 +181,27 @@ class Encoder
 				$chains = $this->splitData($data);
 		}
 
-        // Decoders by default start decoding as text.
+		// Decoders by default start decoding as text.
 		// There is no point in adding the first switch code if it is text
 		// Removed due to code compression
 
-        $codes = [];
-        foreach ($chains as $chain) {
+		$codes = [];
+		foreach ($chains as $chain) {
 			$codes = array_merge($codes, $this->encoders[$chain[1]]->encode($chain[0]));
-        }
+		}
 
-        return $codes;
-    }
+		return $codes;
+	}
 
-    /**
-     * Splits a string into chains (sub-strings) which can be encoded with the same encoder.
-     */
-    private function splitData($data)
-    {
-        $length = strlen($data);
+	/**
+	* Splits a string into chains (sub-strings) which can be encoded with the same encoder.
+	*/
+	private function splitData($data)
+	{
+		$length = strlen($data);
 		$chains = [];
 
-        for ($i = 0; $i < $length; $i++) {
+		for ($i = 0; $i < $length; $i++) {
 
 			$e = $this->getEncoder($data[$i], $i);
 			$chain = $data[$i];
@@ -225,17 +225,17 @@ class Encoder
 		}
 
 		return $chains;
-    }
+	}
 
 	private function getEncoder($char, $pos)
-    {
-        foreach ($this->encoders as $id => $encoder) {
-            if ($encoder->canEncode($char)) {
-                return $id;
-            }
-        }
+	{
+		foreach ($this->encoders as $id => $encoder) {
+			if ($encoder->canEncode($char)) {
+				return $id;
+			}
+		}
 
-        throw \PDF417\pException::InternalError("Cannot encode character at position ".($pos+1));
-    }
+		throw \PDF417\pException::InternalError("Cannot encode character at position ".($pos+1));
+	}
 
 }
