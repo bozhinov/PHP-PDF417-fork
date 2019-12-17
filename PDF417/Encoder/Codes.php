@@ -423,7 +423,7 @@ class Codes
     public static function getCode(int $table, int $word)
     {
         if (!isset(self::$codes[$table][$word])) {
-           throw pException::InternalError("Invalid code word [$table][$word].");
+           throw \PDF417\pException::InternalError("Invalid code word [$table][$word].");
         }
 
         return self::$codes[$table][$word];

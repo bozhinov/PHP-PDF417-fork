@@ -235,7 +235,7 @@ class Encoder
             }
         }
 
-        throw pException::InternalError("Cannot encode character at position ".($pos+1));
+        throw \PDF417\pException::InternalError("Cannot encode character at position ".($pos+1));
     }
 
 }
