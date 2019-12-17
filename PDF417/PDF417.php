@@ -20,14 +20,12 @@ class PDF417
 		* left and right columns.
 		*/
 		$this->options['columns'] = (isset($opts['columns'])) ? $this->option_in_range($opts['columns'], 1, 30) : 6;
-
 		/**
 		* Can be used to force binary encoding. This may reduce size of the
 		* barcode if the data contains many encoder changes, such as when
 		* encoding a compressed file.
 		*/
 		$this->options['hint'] = (isset($options['hint'])) ? $options['hint'] : "none";
-		
 		$this->options['scale'] = (isset($opts['scale'])) ? $this->option_in_range($opts['scale'], 1, 20) : 3;
 		$this->options['ratio'] = (isset($opts['ratio'])) ? $this->option_in_range($opts['ratio'], 1, 10) : 3;
 		$this->options['padding'] = (isset($opts['padding'])) ? $this->option_in_range($opts['padding'], 0, 50) : 20;
