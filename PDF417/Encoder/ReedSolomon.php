@@ -9,7 +9,7 @@ class ReedSolomon
 {
     private $factors = [
 
-		# https://grandzebu.net/informatique/codbar/pdf417coef.txt
+	# https://grandzebu.net/informatique/codbar/pdf417coef.txt
 
         // Level 0
         [27, 917],
