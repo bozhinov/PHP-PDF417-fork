@@ -9,10 +9,10 @@ class PDF417
 	private $options = [];
 	private $renderer;
 
-	public function __construct(array $options = [])
+	public function __construct(array $opts = [])
 	{
-		$this->options['color'] = (isset($options['color'])) ? $options['color'] : new pColor(0);
-		$this->options['bgColor'] = (isset($options['bgColor'])) ? $options['bgColor'] : new pColor(255);
+		$this->options['color'] = (isset($opts['color'])) ? $opts['color'] : new pColor(0);
+		$this->options['bgColor'] = (isset($opts['bgColor'])) ? $opts['bgColor'] : new pColor(255);
 		/**
 		* Number of data columns in the bar code.
 		*
@@ -25,7 +25,7 @@ class PDF417
 		* barcode if the data contains many encoder changes, such as when
 		* encoding a compressed file.
 		*/
-		$this->options['hint'] = (isset($options['hint'])) ? $options['hint'] : "none";
+		$this->options['hint'] = (isset($opts['hint'])) ? $opts['hint'] : "none";
 		$this->options['scale'] = (isset($opts['scale'])) ? $this->option_in_range($opts['scale'], 1, 20) : 3;
 		$this->options['ratio'] = (isset($opts['ratio'])) ? $this->option_in_range($opts['ratio'], 1, 10) : 3;
 		$this->options['padding'] = (isset($opts['padding'])) ? $this->option_in_range($opts['padding'], 0, 50) : 20;
@@ -40,7 +40,7 @@ class PDF417
 		$this->__construct($options);
 	}
 
-	private function option_in_range($value, int $start, int $end, int $default)
+	private function option_in_range($value, int $start, int $end)
 	{
 		if (!is_numeric($value) || $value < $start || $value > $end) {
 			throw pException::InvalidInput("Invalid value. Expected an integer between $start and $end.");
