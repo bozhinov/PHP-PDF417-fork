@@ -2,6 +2,8 @@
 
 namespace PDF417;
 
+use PDF417\Encoder\Encoder;
+
 class PDF417
 {
 	private $options = [];
@@ -113,7 +115,7 @@ class PDF417
 
 	public function encode($data)
 	{
-		$pixelGrid = (new DataEncoder($this->options))->encodeData($data);
+		$pixelGrid = (new Encoder($this->options))->encodeData($data);
 		$this->renderer = (new Renderer($pixelGrid, $this->options));
 	}
 }

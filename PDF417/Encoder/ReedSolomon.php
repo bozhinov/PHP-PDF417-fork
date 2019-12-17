@@ -1,6 +1,6 @@
 <?php
 
-namespace PDF417;
+namespace PDF417\Encoder;
 
 /**
  * Computes the Reed Solomon correction factors.

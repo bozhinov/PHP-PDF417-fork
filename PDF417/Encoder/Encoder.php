@@ -1,13 +1,13 @@
 <?php
 
-namespace PDF417;
+namespace PDF417\Encoder;
 
 /**
  * Encodes data into PDF417 code words.
  *
  * Top level data encoder which assigns encoding to lower level (byte, number, text) encoders.
  */
-class DataEncoder
+class Encoder
 {
 	private $encoders;
 	private $options;
@@ -18,9 +18,9 @@ class DataEncoder
     {
         // Encoders sorted in order of preference
         $this->encoders = [
-            new Encoders\NumberEncoder(),
-            new Encoders\TextEncoder(),
-            new Encoders\ByteEncoder(),
+            new EncoderNumber(),
+            new EncoderText(),
+            new EncoderByte()
         ];
 
         $this->options = $options;

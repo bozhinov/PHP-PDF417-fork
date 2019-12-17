@@ -1,6 +1,6 @@
 <?php
 
-namespace PDF417;
+namespace PDF417\Encoder;
 
 /**
  * Converts high-level (base 929) code words into low-level code words (binary

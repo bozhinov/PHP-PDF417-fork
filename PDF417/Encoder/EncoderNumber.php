@@ -1,6 +1,6 @@
 <?php
 
-namespace PDF417\Encoders;
+namespace PDF417\Encoder;
 
 /**
  * Converts numbers to code words.
@@ -8,7 +8,7 @@ namespace PDF417\Encoders;
  * Can encode: digits 0-9
  * Rate: 2.9 digits per code word.
  */
-class NumberEncoder
+class EncoderNumber
 {
     public function canEncode($char)
     {

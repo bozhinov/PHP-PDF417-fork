@@ -1,6 +1,6 @@
 <?php
 
-namespace PDF417\Encoders;
+namespace PDF417\Encoder;
 
 /**
  * Converts a byte array to code words.
@@ -10,7 +10,7 @@ namespace PDF417\Encoders;
  *
  * Encoding process converts chunks of 6 bytes to 5 code words in base 900.
  */
-class ByteEncoder
+class EncoderByte
 {
     public function canEncode($char)
     {

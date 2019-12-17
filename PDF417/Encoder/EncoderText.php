@@ -1,6 +1,6 @@
 <?php
 
-namespace PDF417\Encoders;
+namespace PDF417\Encoder;
 
 /**
  * Converts text to code words.
@@ -12,7 +12,7 @@ namespace PDF417\Encoders;
  * character (see T_PUN, T_UPP in
  * http://grandzebu.net/informatique/codbar-en/pdf417.htm).
  */
-class TextEncoder
+class EncoderText
 {
     /** Character codes per submode. */
     private $characterTables = [
