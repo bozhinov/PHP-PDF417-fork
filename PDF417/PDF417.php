@@ -19,18 +19,20 @@ class PDF417
 		* The total number of columns will be greater due to adding start, stop,
 		* left and right columns.
 		*/
-		$this->options['columns'] = (isset($options['columns'])) ? $options['columns'] : 6;
+		$this->options['columns'] = (isset($opts['columns'])) ? $this->option_in_range($opts['columns'], 1, 30) : 6;
+
 		/**
 		* Can be used to force binary encoding. This may reduce size of the
 		* barcode if the data contains many encoder changes, such as when
 		* encoding a compressed file.
 		*/
-		$this->options['securityLevel'] = (isset($options['securityLevel'])) ? $options['securityLevel'] : 2;
 		$this->options['hint'] = (isset($options['hint'])) ? $options['hint'] : "none";
-		$this->options['scale'] = (isset($options['scale'])) ? $options['scale'] : 3;
-		$this->options['ratio'] = (isset($options['ratio'])) ? $options['ratio'] : 3;
-		$this->options['padding'] = (isset($options['padding'])) ? $options['padding'] : 20;
-		$this->options['quality'] = (isset($options['quality'])) ? $options['quality'] : 90;
+		
+		$this->options['scale'] = (isset($opts['scale'])) ? $this->option_in_range($opts['scale'], 1, 20) : 3;
+		$this->options['ratio'] = (isset($opts['ratio'])) ? $this->option_in_range($opts['ratio'], 1, 10) : 3;
+		$this->options['padding'] = (isset($opts['padding'])) ? $this->option_in_range($opts['padding'], 0, 50) : 20;
+		$this->options['quality'] = (isset($opts['quality'])) ? $this->option_in_range($opts['quality'], 0, 100) : 90;
+		$this->options['securityLevel'] = (isset($opts['securityLevel'])) ? $this->option_in_range($opts['securityLevel'], 0, 8) : 2;
 
 		$this->validateOptions();
 	}
@@ -40,21 +42,17 @@ class PDF417
 		$this->__construct($options);
 	}
 
-	private function option_in_range(string $name, int $start, int $end)
+	private function option_in_range($value, int $start, int $end, int $default)
 	{
-		if (!is_numeric($this->options[$name]) || $this->options[$name] < $start || $this->options[$name] > $end) {
-			throw pException::InvalidInput("Invalid value for \"$name\". Expected an integer between $start and $end.");
+		if (!is_numeric($value) || $value < $start || $value > $end) {
+			throw pException::InvalidInput("Invalid value. Expected an integer between $start and $end.");
 		}
+
+		return $value;
 	}
 
 	private function validateOptions()
 	{
-		$this->option_in_range('scale', 1, 20);
-		$this->option_in_range('ratio', 1, 10);
-		$this->option_in_range('padding', 0, 50);
-		$this->option_in_range('columns', 1, 30);
-		$this->option_in_range('securityLevel', 0, 8);
-		$this->option_in_range('quality', 0, 100);
 
 		if (!in_array($this->options["hint"], ["binary", "numbers", "text", "none"])){
 			throw pException::InvalidInput("Invalid value for \"hint\". Expected \"binary\", \"numbers\" or \"text\".");
