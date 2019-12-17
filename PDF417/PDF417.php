@@ -51,7 +51,6 @@ class PDF417
 
 	private function validateOptions()
 	{
-
 		if (!in_array($this->options["hint"], ["binary", "numbers", "text", "none"])){
 			throw pException::InvalidInput("Invalid value for \"hint\". Expected \"binary\", \"numbers\" or \"text\".");
 		}
