@@ -5,7 +5,9 @@ Requirements
 ------------
 
 * PHP >= 7.2
-* PHP extensions: bcmath(optional) & gd
+* PHP extensions: 
+  bcmath (on x86 only)
+  gd
 
 Usage overview
 --------------
