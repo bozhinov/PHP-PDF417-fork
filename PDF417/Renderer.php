@@ -82,11 +82,11 @@ class Renderer
 		$this->image = imagecreate($width, $height);
 
 		// Extract options
-		list($R,$G,$B) = $this->options['bgColor']->get();
-		$bgColorAlloc = imagecolorallocate($this->image,$R,$G,$B);
+		list($R, $G, $B) = $this->options['bgColor']->get();
+		$bgColorAlloc = imagecolorallocate($this->image, $R, $G, $B);
 		imagefill($this->image, 0, 0, $bgColorAlloc);
-		list($R,$G,$B) = $this->options['color']->get();
-		$colorAlloc = imagecolorallocate($this->image,$R,$G,$B);
+		list($R, $G, $B) = $this->options['color']->get();
+		$colorAlloc = imagecolorallocate($this->image, $R, $G, $B);
 
 		// Render the barcode
 		foreach ($this->pixelGrid as $y => $row) {
